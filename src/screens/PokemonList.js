@@ -11,15 +11,16 @@ export default function PokemonList() {
   const [pokemon, setPokemon] = useState([]);
   const [loading, setLoading] = useState(false);
   const [cantidadPokemon, setCantidadPokemon] = useState(10);
+  const [nombrePokemon, setNombrePokemon] = useState('ditto');
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${cantidadPokemon}`);
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombrePokemon}`);
       const data = await response.json();
-      setPokemon(data.results.map((result, index) => ({ ...result, id: index + 1 })));
+      setPokemon(data);
     } catch (error) {
-      console.log("Hubo un error listando los pokemones", error);
+      console.log("No se encontro", error);
     } finally {
       setLoading(false);
     }
@@ -27,7 +28,7 @@ export default function PokemonList() {
 
   useEffect(() => {
     fetchData();
-  }, [cantidadPokemon]);
+  }, [nombrePokemon]);
 
   return (
     <View style={styles.container}>
@@ -35,8 +36,8 @@ export default function PokemonList() {
         tituloFormulario='Listado de Pokemones usando Fetch'
         labelInput='Ingrese la cantidad de pokemon a cargar: '
         placeHolderInput='20'
-        valor={cantidadPokemon}
-        setValor={setCantidadPokemon}
+        valor={nombrePokemon}
+        setValor={setNombrePokemon}
       />
       {loading ? (
         <ActivityIndicator style={styles.loading} size="large" color="#0000ff" />
@@ -44,7 +45,7 @@ export default function PokemonList() {
         <FlatList
           data={pokemon}
           renderItem={({ item }) => <PokemonItem item={item} />}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item) => item.forms.name}
           numColumns={numColumns}
           contentContainerStyle={styles.list}
         />

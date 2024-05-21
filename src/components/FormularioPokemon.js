@@ -11,7 +11,7 @@ const FormularioPokemon = ({tituloFormulario, labelInput, placeHolderInput, valo
                 <TextInput
                 style={styles.Input}
                     placeholder={placeHolderInput}
-                    onChangeText={text => setValor(parseInt(text) || 0)}
+                    onChangeText={text => setValor(text|| '')}
                     value={valor}
                 />
             </View>

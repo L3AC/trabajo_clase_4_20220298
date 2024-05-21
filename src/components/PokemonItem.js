@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Dimensions, TextInput, ActivityIndicator } from 'react-native';
 
 const WIDTH = Dimensions.get('window').width;
-const numColumns = 3;
+const numColumns = 2;
 
 const PokemonItem = React.memo(({ item }) => (
   <View style={styles.card}>
     <Image
       style={styles.image}
-      source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.id}.png` }}
+      source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.forms.url.split('/')[6]}.png` }}
     />
-    <Text style={styles.title}>{item.name}</Text>
+    <Text style={styles.title}>{item.forms.name}</Text>
+    <Text style={styles.title}>{item.abilities.ability.name}</Text>
   </View>
 ));
 
