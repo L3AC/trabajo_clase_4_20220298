@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Dimensions, TextInput, ActivityIndicator } from 'react-native';
 
+
+
 const WIDTH = Dimensions.get('window').width;
-const numColumns = 2;
+const numColumns = 3;
 
 import PokemonItem from '../components/PokemonItem';
 import FormularioPokemon from '../components/FormularioPokemon';
@@ -11,16 +13,15 @@ export default function PokemonList() {
   const [pokemon, setPokemon] = useState([]);
   const [loading, setLoading] = useState(false);
   const [cantidadPokemon, setCantidadPokemon] = useState(10);
-  const [nombrePokemon, setNombrePokemon] = useState('ditto');
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombrePokemon}`);
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${cantidadPokemon}`);
       const data = await response.json();
-      setPokemon(data);
+      setPokemon(data.results.map((result, index) => ({ ...result, id: index + 1 })));
     } catch (error) {
-      console.log("No se encontro", error);
+      console.log("Hubo un error listando los pokemones", error);
     } finally {
       setLoading(false);
     }
@@ -28,7 +29,7 @@ export default function PokemonList() {
 
   useEffect(() => {
     fetchData();
-  }, [nombrePokemon]);
+  }, [cantidadPokemon]);
 
   return (
     <View style={styles.container}>
@@ -36,8 +37,8 @@ export default function PokemonList() {
         tituloFormulario='Listado de Pokemones usando Fetch'
         labelInput='Ingrese la cantidad de pokemon a cargar: '
         placeHolderInput='20'
-        valor={nombrePokemon}
-        setValor={setNombrePokemon}
+        valor={cantidadPokemon}
+        setValor={setCantidadPokemon}
       />
       {loading ? (
         <ActivityIndicator style={styles.loading} size="large" color="#0000ff" />
@@ -45,7 +46,7 @@ export default function PokemonList() {
         <FlatList
           data={pokemon}
           renderItem={({ item }) => <PokemonItem item={item} />}
-          keyExtractor={(item) => item.forms.name}
+          keyExtractor={(item) => item.name}
           numColumns={numColumns}
           contentContainerStyle={styles.list}
         />

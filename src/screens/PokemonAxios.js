@@ -4,7 +4,7 @@ import axios from 'axios';
 import FormularioPokemon from '../components/FormularioPokemon';
 
 const WIDTH = Dimensions.get('window').width;
-const numColumns = 2;
+const numColumns = 3;
 
 export default function PokemonAxios() {
   const [pokemon, setPokemon] = useState([]);
@@ -35,7 +35,6 @@ export default function PokemonAxios() {
         <Image
           style={styles.image}
           source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.url.split('/')[6]}.png` }}
-          
         />
         <Text style={styles.title}>{item.name}</Text>
       </View>
